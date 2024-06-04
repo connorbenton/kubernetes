@@ -45,7 +45,7 @@ Step 1:
   K3s installation
 
 1. Install K3s on the master node :
-```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable=traefik,servicelb --cluster-cidr=10.42.0.0/16,2001:cafe:42::/56 --service-cidr=10.43.0.0/16,2001:cafe:43::/112" sh -```  (Traefik and metallb will be installed later with custom values, IPv6 must be enabled now otherwise it cannot be added later!)
+```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--cluster-cidr=10.42.0.0/16,2001:cafe:42::/56 --service-cidr=10.43.0.0/16,2001:cafe:43::/112 --disable traefik --disable servicelb" sh -```  (Traefik and metallb will be installed later with custom values, IPv6 must be enabled now otherwise it cannot be added later!)
 (If needed, copy /etc/rancher/k3s/k3s.yaml to your user area ~/.kube/config (permissions 600), and add ```export KUBECONFIG=~/.kube/config``` to your ~/.bashrc.
 
 2. Get your token for worker nodes deployment:
