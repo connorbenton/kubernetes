@@ -1,35 +1,25 @@
 # K3s Mini Cluster Homelab
-The project involves the configuration of a 3-node mini cluster, incorporating a Metallb load balancer via BGP and Traefik as the Ingress Controller. Cert Manager is employed to automate Let's Encrypt certificate management, utilizing the DNS challenge method over Cloudflare.
+The project involves the configuration of a 3-node mini cluster, incorporating a Metallb load balancer via BGP and NGINX as the Ingress Controller. Cert Manager is employed to automate Let's Encrypt certificate management, utilizing the DNS challenge method over Cloudflare.
 
 Hardware components:
 
-- Pfsense Appliance
-- ASUS mini PC (utilizing Proxmox with 2 VMs as worker nodes)
-- Raspberry Pi4 with 8GB RAM (designated as the Master Node)
-- Cisco switch
-- Ubiquity Access Point
+- Router (eventually OPNSense applicance)
+- Server/master node (also set up in this cluster to run pods, not just manage the cluster)
+- Any number of agents (worker nodes)
 
-This undertaking focuses on establishing a K3s cluster within resource constraints, utilizing an ASUS mini PC and a Raspberry Pi4. The ASUS mini PC features 2 SSDs and 32GB of RAM, shared with Proxmox, which hosts 2 VMs allocated with 14GB RAM each for worker nodes. Given the ASUS mini PC's limitations for high availability clustering, each node is installed on separate internal SSDs to ensure continued operation in the event of one disk failure. Persistent data for all pods is stored on an external 256GB NVME volume, connected to the ASUS mini PC via USB 3.1 gen2 and shared between the worker nodes for simplified backup and replacement procedures. This external NVME volume is mounted to Proxmox and the worker nodes as an NFS volume. The Raspberry Pi4, equipped with a 128GB SD card, serves as a tainted master node, overseeing pod scheduling exclusively within the worker nodes.
+This undertaking focuses on establishing a K3s cluster, where pods have PVs that are stored locally (to maximize performance). Future goal would be to move all persistent storage to one single location (either on a single pod, or via a distributed storage across all pods) and to benchmark to see if there are large performance drops when using such a network-based storage. Pods are configured to run on specific nodes, so that resource-heavy applications/pods can be located specifically on high-performance nodes, but another future goal would be to benchmark actual performance across nodes to see if there would be performance issues were one high perf node to fail and its pods passed to a lower perf node.
 
-Webserver:
-- Nginx
+Original setup is to run everything in IPv4, but depending on ISP if IPv6 is instead accessible, K3S is set up as dual stack so that IPv6 can be configured as well. This repo contains all pods for a 'baseline' cluster setup, further pods (for example, ones that only come with a docker/docker-compose setup) can be set up via the 'generic docker app example' subdir.  
 
 LoadBalancer/Ingress/SSL/Auth:
 - Metallb
-- Traefik
+- Nginx
 - Cert-manager 
 - Authentik
 
-Media/Cloud:
-- Plex
-- Tautulli
-- Nextcloud
-
 Utilities/tools:
 - Heimdall 
-- Ubiquity Unifi Controller
 - Webtop
-- Shinobi 
 
 Applications Database:
 - Mariadb
@@ -40,6 +30,9 @@ Monitoring/Logs:
 - Prometheus
 - Node Exporter
 - Telegraf
+
+Test webserver (to see if cluster is working correctly and accessible from outside):
+- Nginx
 
 CI/CD
 - ArgoCD
@@ -52,7 +45,7 @@ Step 1:
   K3s installation
 
 1. Install K3s on the master node :
-```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik,servicelb" sh -```  (Traefik and metallb will be installed later with custom values)
+```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable=traefik,servicelb" sh -```  (Traefik and metallb will be installed later with custom values, IPv6 must be enabled now otherwise it cannot be added later!)
 (If needed, copy /etc/rancher/k3s/k3s.yaml to your user area ~/.kube/config (permissions 600), and add ```export KUBECONFIG=~/.kube/config``` to your ~/.bashrc.
 
 2. Get your token for worker nodes deployment:
