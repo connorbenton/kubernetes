@@ -9,7 +9,7 @@ Hardware components:
 
 This undertaking focuses on establishing a K3s cluster, where pods have PVs that are stored locally (to maximize performance). Future goal would be to move all persistent storage to one single location (either on a single pod, or via a distributed storage across all pods) and to benchmark to see if there are large performance drops when using such a network-based storage. Pods are configured to run on specific nodes, so that resource-heavy applications/pods can be located specifically on high-performance nodes, but another future goal would be to benchmark actual performance across nodes to see if there would be performance issues were one high perf node to fail and its pods passed to a lower perf node.
 
-Original setup is to run everything in IPv4, but depending on ISP if IPv6 is instead accessible, K3S is set up as dual stack so that IPv6 can be configured as well. This cluster depends on the router provisioning IPv6 addresses already for all the nodes, otherwise k3s will not start! The following addresses are used for the cluster pods and services (see the K3s installation section below):
+Original setup is to run everything in IPv4, but depending on ISP if IPv6 is instead accessible, K3S is set up as dual stack so that IPv6 can be configured as well. For example, on a local network where all devices are assigned 192.168.2.X and 2001:cafe:41::/56. This cluster depends on the router provisioning IPv6 addresses already for all the nodes, otherwise k3s will not start! The following addresses are used for the cluster pods and services (see the K3s installation section below):
 
 - Cluster: 10.42.0.0/16, 2001:cafe:42::/56
 - Services: 10.43.0.0/16, 2001:cafe:43::/112
