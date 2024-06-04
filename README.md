@@ -66,9 +66,7 @@ https://docs.k3s.io/quick-start
 Step 2:
    Install Metallb desired version with BGP values file 
 
-```helm repo add metallb```
-
-```https://metallb.github.io/metallb helm install metallb metallb/metallb```
+```helm repo add metallb https://metallb.github.io/metallb```
 
 ```helm install metallb metallb/metallb -f values.yaml```
 
