@@ -67,7 +67,9 @@ Step 2:
    Install Metallb desired version with BGP values file 
 
 ```helm repo add metallb```
+
 ```https://metallb.github.io/metallb helm install metallb metallb/metallb```
+
 ```helm install metallb metallb/metallb -f values.yaml```
 
 https://metallb.universe.tf/installation/
