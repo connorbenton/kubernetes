@@ -66,8 +66,9 @@ https://docs.k3s.io/quick-start
 Step 2:
    Install Metallb desired version with BGP values file 
 
-```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-frr.yaml -f bgpconfig.yaml```
-(bgpconfig values includes pfsense neightbor configuration for the metallb frr yaml)
+```helm repo add metallb```
+```https://metallb.github.io/metallb helm install metallb metallb/metallb```
+```helm install metallb metallb/metallb -f values.yaml```
 
 https://metallb.universe.tf/installation/
 
