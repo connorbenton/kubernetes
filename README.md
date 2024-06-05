@@ -40,6 +40,7 @@ Test webserver (to see if cluster is working correctly and accessible from outsi
 - Nginx
 
 CI/CD
+- Selfhosted Gitea
 - ArgoCD
 
 ----------------------------
